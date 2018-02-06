@@ -1,0 +1,43 @@
+怎样求出一个结构体里的字段相对于结构体对象首地址的内存偏移量？
+
+
+
+以下面的结构体为例：
+
+struct S {
+  char c;
+  double d;
+};
+
+(size_t) &((struct S*) 0)->d 即得到了字段 d 相对 S 起始地址的偏移量。
+
+实际上，ptr->member 访问过程中，编译器翻译成 *(ptr + offset_of_member)。那么上
+述表达式翻译的结果是：
+
+  (size_t) &(*(zero_ptr + offset_of_d))
+
+对一个指针解引用之后立刻取地址，结果自然是这个指针本身。实际上这个指针的位置只
+要不是 volatile 限定的，这个解引用就完全无意义。于是编译器会取消这次访问。
+
+上述值也就是 (size_t) (zero_ptr + offset_of_d)，也就恰好是 offset_of_d。
+
+如果编译器不支持这样的优化，或者编译器通过选项关闭了这种优化，那么这个表达式将
+会因为访问未知位置而导致不可预料的行为。
+
+但实际上编译器总有办法得知一个成员的偏移量，因此这个值总是可以求的，只不过可能
+需要编译器的支持。
+
+为了使用方便，可以定义宏：
+
+#define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+
+如果编译器提供了更好的选择：
+
+#ifdef __compiler_offset_of
+# define offsetof(TYPE, MEMBER) __compiler_offset_of(TYPE, MEMBER)
+#else
+# define offsetof(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#endif
+
+实际上，offsetof 宏已经是 C/C++ 标准库的一部分。定义在 stddef.h/cstddef 头文件
+里。
