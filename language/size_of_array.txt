@@ -1,0 +1,23 @@
+对 C++ 的原生数组 A，写出函数 sizeOfArray，使得 sizeOfArray(A) 为 A 的字节数。
+
+
+1. 宏
+
+#define sizeOfArray(a) sizeof(a)
+
+但这跟函数有本质区别，并未完全解决问题。
+
+
+2. 模板数组引用
+
+template<typename T, size_t N>
+size_t sizeOfArray(T (&ptr)[N]) {
+    return sizeof(ptr);
+}
+
+3. C++14 的自动推导参数
+
+size_t sizeOfArray(auto &arr) {
+    return sizeof(arr);
+}
+
