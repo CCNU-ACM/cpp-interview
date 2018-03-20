@@ -15,5 +15,4 @@ std::vector 的惯常实现是倍增表，或者动态数组。当预设的内�
 因而其时间复杂度是 O(N) 的。也因此每个 push_back 的时间消耗为均摊 O(1)。
 
 
-__TIPS__
-push_back 容易被错认为用时是 O(log(N)) 的。
+注：push_back 容易被错认为用时是 O(log(N)) 的。

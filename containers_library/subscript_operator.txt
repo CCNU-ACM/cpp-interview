@@ -1,0 +1,15 @@
+标准库可以随机访问的容器大都定义了下标运算符。例如 std::vector 定义了如下两个版
+本：
+    T& operator[](size_t);
+    const T& operator[](size_t) const;
+
+请解释为什么它需要这两个版本的重载。
+
+然而同时 std::map 的下标运算符却只有一个[^1]：
+    T& operator[](const Key&);
+
+也请解释它和 vector 之间存在区别的原因。
+
+注1：std::map 在 C++11 标准里对下标运算符还有一个重载：
+        T& operator[](Key&&);
+    但本题目不考虑它。

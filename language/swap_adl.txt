@@ -1,0 +1,9 @@
+某程序员编写了一个函数：iterator_swap 用来交换两个迭代器（或者指针）指向的对象。
+
+template<typename Iter>
+void iterator_swap(Iter a, Iter b) {
+    using std::swap;
+    swap(*a, *b);
+}
+
+他为什么要这样写呢？修改成直接调用 std::swap 或者 swap 会如何？
